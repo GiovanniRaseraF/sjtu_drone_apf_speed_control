@@ -8,7 +8,35 @@ The acronym 'sjtu' stands for Shanghai Jiao Tong University. This package has be
 
 # Requirements
 
-This package is tested with ROS 2 (Ubuntu 22.04) and Gazebo 11.
+- This package is tested with ROS 2 (Ubuntu 22.04) and Gazebo 11.
+- This Version in test using Docker please refer to the docker manual to install it
+
+# --------------------------------------------------------------
+# Custom Version
+- This version was built by Giovanni Rasera 143395@spes.uniud.it
+- github: [cetriolino](https://github.com/GiovanniRaseraF)
+- This is specific for ros2 humble
+## Build -> Use
+### Install
+```bash
+    sudo bash local_build.sh
+```
+### Use
+```bash
+    sudo bash local_run.sh
+```
+# IMPORTANT !!!
+- When you modify code you need to rebuild the docker !!!
+```bash
+    # modfy some code .............
+    sudo bash local_build.sh
+    sudo bash local_run.sh
+```
+
+# Issues
+- Build is very slow, im working on local cache to speedup build
+
+# --------------------------------------------------------------
 
 # Downloading and building
 
