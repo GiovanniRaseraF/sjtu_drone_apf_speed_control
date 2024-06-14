@@ -5,7 +5,7 @@ usage(){
     exit 1
 }
 
-ROS_DISTRO=${ROS_DISTRO:-"iron"}  # [humble, iron, rolling]
+ROS_DISTRO=${ROS_DISTRO:-"humble"}  # [humble, iron, rolling]
 while getopts "r:" opt; do
     case $opt in
         r)
@@ -25,12 +25,9 @@ done
 XSOCK=/tmp/.X11-unix
 XAUTH=$HOME/.Xauthority
 
-docker pull georgno/sjtu_drone:ros2-${ROS_DISTRO}
-
 if [ $? -ne 0 ]; then
     exit 1
 fi
-
 
 xhost +local:docker
 docker run \
@@ -44,5 +41,5 @@ docker run \
     --privileged \
     --net=host \
     --name="sjtu_drone" \
-    georgno/sjtu_drone:ros2-${ROS_DISTRO}
+    sjtu_drone
 xhost -local:docker

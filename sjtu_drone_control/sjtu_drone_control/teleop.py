@@ -35,6 +35,8 @@ q/e : increase/decrease linear and angular velocity (upper/lower case)
 A/D: rotate left/right
 r/f : rise/fall (upper/lower case)
 
+h: to say Ciao sono Giovanni e Diletta
+
 ---------------------------
 CTRL-C to quit
 ---------------------------
@@ -137,6 +139,9 @@ class TeleopNode(Node):
                 # Land
                 self.publish_cmd_vel()
                 self.land_publisher.publish(Empty())
+            elif key.lower() == 'h':
+                # Say Ciao sono Giovanni
+                print("Ciao sono Giovanni")
 
     def get_key(self) -> str:
         """
