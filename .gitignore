@@ -1,3 +1,8 @@
 plugins/
 bin/
 __pycache__/
+log/
+install/
+build/
+.devcontainer/
+.github/
