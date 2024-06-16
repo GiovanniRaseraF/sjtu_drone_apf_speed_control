@@ -6,3 +6,4 @@ install/
 build/
 .devcontainer/
 .github/
+tmp/
