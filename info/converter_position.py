@@ -11,7 +11,6 @@ pmaxy = 50
 pminx = 0
 pminy = 0
 
-
 def gazebo_to_python(gx, gy):
     
     px = Math.floor(((gx - gminx) * (pmaxx - pminx) / (gmaxx - gminx)) + pminx)
@@ -25,5 +24,3 @@ def python_to_gazebo(px, py):
     gy = Math.floor(((py - pminy) * (gmaxy - gminy) / (pmaxy - pminy)) + gminy)
 
     return gx, gy
-
-gazebo_to_python(0,0)
