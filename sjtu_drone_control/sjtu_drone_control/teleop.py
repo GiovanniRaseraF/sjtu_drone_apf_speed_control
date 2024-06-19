@@ -16,8 +16,6 @@
 import rclpy
 
 from rclpy.node import Node
-from geometry_msgs.msg import Twist, Vector3
-from std_msgs.msg import Empty
 import sys
 import termios
 import tty
@@ -61,9 +59,13 @@ class TeleopNode(Node):
         self.takeoff_publisher = self.create_publisher(Empty, 'takeoff', 10)
         self.land_publisher = self.create_publisher(Empty, 'land', 10)
 
-        # Subscribe to Drone positioning
-        self.sub_gt_pose = self.create_subscription(Pose, '/simple_drone/gt_pose', self.cb_gt_pose, 100000)
-        self.sub_state = self.create_subscription(Int8, 'state', self.cb_state, 1024)
+        self.takeoff_sub = self.create_subscription(Empty, "takeoff", self.cb_takeoff, 10)
+        
+        self.sub_gt_pose = self.create_subscription(
+            Pose, 
+            "/simple_drone/gt_pose", 
+            self.cb_gt_pose, 10)
+
 
         # Velocity parameters
         self.linear_velocity = 0.0
@@ -77,12 +79,15 @@ class TeleopNode(Node):
         self.create_timer((1/30), self.read_keyboard_input)
 
     # Drone positioning 
-    def cb_gt_pose(self, p : Pose):
+    def cb_gt_pose(self, p):
         self.pose = p
-        print("pose")
+        self.get_logger().info('pose: "%s"' % p.data)
     
     def cb_state(self, s : Int8):
         print("state")
+
+    def cb_takeoff(self, e):
+        print("empty")
 
     def get_velocity_msg(self) -> str:
         return "Linear Velocity: " + str(self.linear_velocity) + "\nAngular Velocity: " \
@@ -94,7 +99,7 @@ class TeleopNode(Node):
         """
         while rclpy.ok():
             # Print the instructions
-            print(MSG+self.get_velocity_msg())
+            print(MSG+self.get_velocity_msg()+str(self.pose))
             # Implement a non-blocking keyboard read
             key = self.get_key()
             # Handle velocity changes
@@ -162,8 +167,16 @@ class TeleopNode(Node):
             elif key.lower() == 'h':
                 # Say Ciao sono Giovanni
                 print("Ciao sono Giovanni")
+
+            elif key.lower() == "n": 
+                # Subscribe to Drone positioning
+                #self.pub_gt_pose = self.create_publisher(Pose, '/simple_drone/gt_pose', 10)
+                #self.sub_state = self.create_subscription(Int8, 'state', self.cb_state, 1024)
+                print("none")
             elif key.lower() == "g":
                 print(f"please go to goal: from {self.pose}")
+                tt = self.get_topic_names_and_types()
+                print(tt)
 
     def get_key(self) -> str:
         """
@@ -190,6 +203,11 @@ class TeleopNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     teleop_node = TeleopNode()
+
+    tt = teleop_node.get_topic_names_and_types()
+    print(tt)
+    t = input("ENTER> ")
+
     rclpy.spin(teleop_node)
     teleop_node.destroy_node()
     rclpy.shutdown()

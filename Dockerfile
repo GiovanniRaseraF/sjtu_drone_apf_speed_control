@@ -24,8 +24,9 @@ COPY ./sjtu_drone_description /ros2_ws/src/sjtu_drone_description
 COPY ./sjtu_drone_bringup /ros2_ws/src/sjtu_drone_bringup
 COPY ./sjtu_drone_control /ros2_ws/src/sjtu_drone_control
 
-RUN curl -L https://github.com/osrf/gazebo_models/archive/refs/heads/master.zip -o /tmp/gazebo_models.zip \
-    && unzip /tmp/gazebo_models.zip -d /tmp && mkdir -p ~/.gazebo/models/ && mv /tmp/gazebo_models-master/* ~/.gazebo/models/ \
+COPY ./cache/gazebo_models.zip /tmp/gazebo_models.zip
+
+RUN unzip /tmp/gazebo_models.zip -d /tmp && mkdir -p ~/.gazebo/models/ && mv /tmp/gazebo_models-master/* ~/.gazebo/models/ \
     && rm -r /tmp/gazebo_models.zip
 
 # local cache experimental
