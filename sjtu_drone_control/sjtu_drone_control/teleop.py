@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import rclpy
+
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, Vector3
 from std_msgs.msg import Empty
@@ -21,6 +22,10 @@ import sys
 import termios
 import tty
 
+# Added By Giovanni Rasera
+from std_msgs.msg import Empty, Bool, Int8, String
+from geometry_msgs.msg import Twist, Pose, Vector3
+from sensor_msgs.msg import Range, Image, Imu
 
 MSG = """
 Control Your Drone!
@@ -34,6 +39,7 @@ t/l: takeoff/land (upper/lower case)
 q/e : increase/decrease linear and angular velocity (upper/lower case)
 A/D: rotate left/right
 r/f : rise/fall (upper/lower case)
+g: please go to goal !
 
 h: to say Ciao sono Giovanni e Diletta
 
@@ -46,12 +52,18 @@ CTRL-C to quit
 
 class TeleopNode(Node):
     def __init__(self) -> None:
+        self.pose = None
+
         super().__init__('teleop_node')
 
         # Publishers
         self.cmd_vel_publisher = self.create_publisher(Twist, 'cmd_vel', 10)
         self.takeoff_publisher = self.create_publisher(Empty, 'takeoff', 10)
         self.land_publisher = self.create_publisher(Empty, 'land', 10)
+
+        # Subscribe to Drone positioning
+        self.sub_gt_pose = self.create_subscription(Pose, '/simple_drone/gt_pose', self.cb_gt_pose, 100000)
+        self.sub_state = self.create_subscription(Int8, 'state', self.cb_state, 1024)
 
         # Velocity parameters
         self.linear_velocity = 0.0
@@ -63,6 +75,14 @@ class TeleopNode(Node):
 
         # Start a timer to listen to keyboard inputs
         self.create_timer((1/30), self.read_keyboard_input)
+
+    # Drone positioning 
+    def cb_gt_pose(self, p : Pose):
+        self.pose = p
+        print("pose")
+    
+    def cb_state(self, s : Int8):
+        print("state")
 
     def get_velocity_msg(self) -> str:
         return "Linear Velocity: " + str(self.linear_velocity) + "\nAngular Velocity: " \
@@ -142,6 +162,8 @@ class TeleopNode(Node):
             elif key.lower() == 'h':
                 # Say Ciao sono Giovanni
                 print("Ciao sono Giovanni")
+            elif key.lower() == "g":
+                print(f"please go to goal: from {self.pose}")
 
     def get_key(self) -> str:
         """
