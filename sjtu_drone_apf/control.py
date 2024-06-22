@@ -11,6 +11,9 @@ from std_msgs.msg import Empty, Bool, Int8, String
 from geometry_msgs.msg import Twist, Pose, Vector3
 from sensor_msgs.msg import Range, Image, Imu
 
+# positioning
+from converter_position import *
+
 # this is to test different types of topics
 prefix = "/simple_drone/"
 
@@ -40,15 +43,15 @@ class APFConrolNode(Node):
                 )
             )
         """
-
         pos = p.position
         x = pos.x
         y = pos.y
-        z = pos.z
 
-        print(f"x: {x}")
-        print(f"y: {y}")
-        print(f"z: {z}")
+        # calculate field positioning
+        fx, fy = gazebo_to_python(x, y)
+
+        print(f"fx: {fx}")
+        print(f"fy: {fy}")
 
 
 
