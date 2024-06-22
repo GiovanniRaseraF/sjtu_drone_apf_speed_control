@@ -23,6 +23,7 @@ RUN mkdir -p /ros2_ws/src
 COPY ./sjtu_drone_description /ros2_ws/src/sjtu_drone_description
 COPY ./sjtu_drone_bringup /ros2_ws/src/sjtu_drone_bringup
 COPY ./sjtu_drone_control /ros2_ws/src/sjtu_drone_control
+COPY ./sjtu_drone_apf /home/fdsa/sjtu_drone_apf
 
 COPY ./cache/gazebo_models.zip /tmp/gazebo_models.zip
 

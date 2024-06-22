@@ -7,3 +7,4 @@ build/
 .devcontainer/
 .github/
 tmp/
+cache/
